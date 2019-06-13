@@ -4,14 +4,21 @@ import paho.mqtt.client as mqtt
 import feedback_db_helper
 import json
 import faces
+import time
 
 class QueueSubscriber:
 
     def __init__(self):
-        broker = "broker.hivemq.com"
+         parser = configparser.ConfigParser()
+        parser.read('config.ini')
         self.client = mqtt.Client() 
+        url = parser.get('mqtt_broker', 'url')
+        port = parser.getint('mqtt_broker', 'port')
+        username = parser.get('mqtt_broker', 'username')
+        password = parser.get('mqtt_broker', 'password')
         print("connecting to broker ",broker)
-        self.client.connect(broker) #connect
+        self.client.username_pw_set(username, password)
+        self.client.connect(broker,port)
         self.client.loop_start()
         self.client.on_message = on_message
         print("subscribing ")
@@ -24,7 +31,7 @@ class QueueSubscriber:
 def on_message(client, userdata, message):
     m_in = json.loads(str(message.payload.decode("utf-8")))
     print (m_in["encoding"], m_in["isUnwanted"], m_in["chat_id"], m_in["time"])
-    face_id = faces.query_and_add(m_in["encoding"])
+        face_id = faces.query_and_add(m_in["encoding"])
     db = feedback_db_helper.FeedbackDBHelper()
     db.connect()
     t = db.get_time_by_target_and_chat_id(m_in["chat_id"], face_id)
@@ -32,4 +39,3 @@ def on_message(client, userdata, message):
         db.add_feedback(m_in["chat_id"], face_id,
         m_in["isUnwanted"], m_in["time"])
     db.close()
-
