@@ -1,0 +1,13 @@
+#pip requirements:
+gpiozero
+picamera
+requests
+numpy
+paho-mqtt
+
+
+#Raspberry requirements
+libopenblas-dev
+dlib (built from source)
+face_recognition
+
