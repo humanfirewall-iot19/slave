@@ -8,7 +8,7 @@ import faces
 class QueueSubscriber:
 
     def __init__(self):
-        broker = "iot.eclipse.org"
+        broker = "broker.hivemq.com"
         self.client = mqtt.Client() 
         print("connecting to broker ",broker)
         self.client.connect(broker) #connect
