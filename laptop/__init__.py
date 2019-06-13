@@ -2,7 +2,13 @@ import cv2
 
 WNAME = "HumanFirewall Test"
 
+board_id = input("Enter the board id: ")
+
 slave_callback = lambda x: None
+
+def get_id():
+    global board_id
+    return board_id
 
 def register_handler(cb):
     global slave_callback
@@ -14,7 +20,6 @@ def device_setup_and_idle():
     #cv2.resizeWindow(WNAME, 1400,900)
 
     img_counter = 0
-    board_id = input("Enter the board id: ")
 
     while True:
         ret, frame = cam.read()

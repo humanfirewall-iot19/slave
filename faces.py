@@ -15,9 +15,9 @@ data = {
   "timestamps": [],
 }
 
-def get_econding(filename):
+def get_encoding(filename):
     img = fr.load_image_file(filename)
-    boxes = face_recognition.face_locations(img, model="hog")
+    boxes = fr.face_locations(img, model="hog")
     if len(boxes) < 1:
         raise FaceNotFound()
     enc = fr.face_encodings(img, boxes)
@@ -28,29 +28,30 @@ def get_econding(filename):
 def query_if_exists_byfile(filename):
     global data
     enc = get_encoding(filename)
-    matches = face_recognition.compare_faces(data["encodings"], 
+    matches = fr.compare_faces(data["encodings"], 
                                              enc, tolerance=TRESHOLD)
     try:
-        return matches.index(True)
+        return enc, matches.index(True)
     except ValueError:
         return None
 
 def query_and_add_byfile(filename, timestamp):
     global data
     enc = get_encoding(filename)
-    matches = face_recognition.compare_faces(data["encodings"], 
+    matches = fr.compare_faces(data["encodings"], 
                                              enc, tolerance=TRESHOLD)
     try:
-        return matches.index(True)
+        return enc, matches.index(True)
     except ValueError:
         data["encodings"].append(enc)
         data["timestamps"].append(timestamp)
         with open("encodings.pickle", "wb") as f:
             pickle.dump(data, f)
+        return enc, len(data["encodings"])-1
 
 def query_if_exists(enc):
     global data
-    matches = face_recognition.compare_faces(data["encodings"], 
+    matches = fr.compare_faces(data["encodings"], 
                                              enc, tolerance=TRESHOLD)
     try:
         return matches.index(True)
@@ -59,7 +60,7 @@ def query_if_exists(enc):
 
 def query_and_add(enc, timestamp):
     global data
-    matches = face_recognition.compare_faces(data["encodings"], 
+    matches = fr.compare_faces(data["encodings"], 
                                              enc, tolerance=TRESHOLD)
     try:
         return matches.index(True)
@@ -68,6 +69,7 @@ def query_and_add(enc, timestamp):
         data["timestamps"].append(timestamp)
         with open("encodings.pickle", "wb") as f:
             pickle.dump(data, f)
+        return len(data["encodings"])-1
 
 def query_by_time(timestamp):
     global data

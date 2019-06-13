@@ -8,7 +8,7 @@ from picamera import PiCamera
 slave_callback = lambda x: None
 
 # get the board serial number
-def getserial():
+def get_id():
     # Extract serial from cpuinfo file
     cpuserial = "0000000000000000"
     try:
