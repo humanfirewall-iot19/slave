@@ -14,7 +14,7 @@ def device_setup_and_idle():
     #cv2.resizeWindow(WNAME, 1400,900)
 
     img_counter = 0
-    board_id = raw_input("Enter the board id: ")
+    board_id = input("Enter the board id: ")
 
     while True:
         ret, frame = cam.read()
