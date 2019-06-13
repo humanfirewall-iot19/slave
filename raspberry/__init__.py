@@ -1,9 +1,11 @@
 #! /usr/bin/env python3
+
 from gpiozero import Button
 from time import sleep
 from hashlib import sha256
 from picamera import PiCamera
-#import requests
+
+slave_callback = lambda x: None
 
 # get the board serial number
 def getserial():
@@ -20,25 +22,26 @@ def getserial():
         cpuserial = "ERROR000000000"
     return cpuserial
 
-#ring callback
 def ring():
-    #camera.start_preview()
-    #sleep(5)
     camera.capture('/home/pi/photo.jpg')
-    #camera.stop_preview()
-    print("took photo")
-    #sending data to server
+    slave_callback('/home/pi/photo.jpg')
 
-#initialize the button
-button = Button(3)
-#initialize the camera
-camera=PiCamera()
-camera.resolution = (1920, 1080)
-camera.rotation=180
-#we get the sha256 hash of the board's serial and enconde it in utf8
-serial=getserial()
-#serial=sha256(getserial().encode("utf-8")).hexdigest()
-#register the callback
-button.when_pressed=ring
-while True:
-    sleep(1)
+def register_handler(cb):
+    global slave_callback
+    slave_callback = cb
+
+def device_setup_and_idle():
+    #initialize the button
+    button = Button(3)
+    #initialize the camera
+    camera = PiCamera()
+    camera.resolution = (1920, 1080)
+    camera.rotation = 180
+    #we get the sha256 hash of the board's serial and enconde it in utf8
+    serial = getserial()
+    #register the callback
+    button.when_pressed = ring
+
+    while True:
+        sleep(1)
+
