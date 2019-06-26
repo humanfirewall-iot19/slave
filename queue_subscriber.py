@@ -5,6 +5,7 @@ import feedback_db_helper
 import json
 import faces
 import time
+import configparser
 
 class QueueSubscriber:
 
@@ -39,3 +40,5 @@ def on_message(client, userdata, message):
         db.add_feedback(m_in["chat_id"], face_id,
         m_in["isUnwanted"], m_in["time"])
     db.close()
+
+    
