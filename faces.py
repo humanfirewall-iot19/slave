@@ -38,7 +38,7 @@ def query_if_exists_byfile(filename):
     try:
         return enc, matches.index(True)
     except ValueError:
-        return None
+        return enc, None
 
 def query_and_add_byfile(filename, timestamp):
     global data
