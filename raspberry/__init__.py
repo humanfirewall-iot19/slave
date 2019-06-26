@@ -38,7 +38,7 @@ def device_setup_and_idle():
     camera.resolution = (1920, 1080)
     camera.rotation = 180
     #we get the sha256 hash of the board's serial and enconde it in utf8
-    serial = getserial()
+    serial = get_id()
     #register the callback
     button.when_pressed = ring
 
