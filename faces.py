@@ -5,7 +5,7 @@ import numpy as np
 import pickle
 import os
 
-TRESHOLD = 0.4
+TRESHOLD = 0.6
 
 class FaceNotFound(RuntimeError):
     pass
@@ -32,6 +32,7 @@ def get_encoding(filename):
 def query_if_exists_byfile(filename):
     global data
     enc = get_encoding(filename)
+    print("searching in %d encodings..." % len(data["encodings"]))
     matches = fr.compare_faces(data["encodings"], 
                                              enc, tolerance=TRESHOLD)
     try:
@@ -42,6 +43,7 @@ def query_if_exists_byfile(filename):
 def query_and_add_byfile(filename, timestamp):
     global data
     enc = get_encoding(filename)
+    print("searching in %d encodings..." % len(data["encodings"]))
     matches = fr.compare_faces(data["encodings"], 
                                              enc, tolerance=TRESHOLD)
     try:
@@ -55,6 +57,7 @@ def query_and_add_byfile(filename, timestamp):
 
 def query_if_exists(enc):
     global data
+    print("searching in %d encodings..." % len(data["encodings"]))
     matches = fr.compare_faces(data["encodings"], 
                                              enc, tolerance=TRESHOLD)
     try:
@@ -64,6 +67,7 @@ def query_if_exists(enc):
 
 def query_and_add(enc, timestamp):
     global data
+    print("searching in %d encodings..." % len(data["encodings"]))
     matches = fr.compare_faces(data["encodings"], 
                                              enc, tolerance=TRESHOLD)
     try:
