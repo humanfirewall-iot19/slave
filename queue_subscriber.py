@@ -15,7 +15,7 @@ class QueueSubscriber:
         self.client.connect(ip, 1883)
         self.client.loop_start()
         self.client.on_message = on_message
-        print("subscribing ")
+        print("subscribing on ", ip)
         self.client.subscribe("masterResults") #subscribe
         
     def stop(self):
