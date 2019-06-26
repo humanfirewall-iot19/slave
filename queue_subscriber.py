@@ -18,7 +18,7 @@ class QueueSubscriber:
         username = parser.get('mqtt_broker', 'username')
         password = parser.get('mqtt_broker', 'password')
         self.client.username_pw_set(username, password)
-        self.client.connect(broker,port)
+        self.client.connect(url, port)
         self.client.loop_start()
         self.client.on_message = on_message
         print("subscribing ")
