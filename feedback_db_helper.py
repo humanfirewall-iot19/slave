@@ -64,10 +64,10 @@ class FeedbackDBHelper:
         for elem in diff:
             self.add_feedback(elem[0],elem[1],elem[2],elem[3])
 
-    def print(self):
+    def __str__(self):
         stmt = "SELECT * FROM userFeedback " 
         for x in self.conn.execute(stmt):
-            print(x[0],x[1],x[2],x[3]) 
+            print(x[0],x[1],x[2],x[3])
 
     def get_feedback_by_target(self, target):
         stmt1 = "SELECT count(*) FROM userFeedback where target = (?) AND unwanted == 1 group by target"
