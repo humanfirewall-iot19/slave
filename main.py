@@ -49,7 +49,7 @@ def image_handler(image_path):
                           files=files, data={"json": req})
         print(r)
 
-qs = queue_subscriber.QueueSubscriber()
+qs = queue_subscriber.QueueSubscriber(MASTER_IP)
 
 dev.register_handler(image_handler)
 dev.device_setup_and_idle()

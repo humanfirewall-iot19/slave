@@ -49,6 +49,7 @@ def query_and_add_byfile(filename, timestamp):
     try:
         return enc, matches.index(True)
     except ValueError:
+        print("adding with id ", len(data["encodings"]))
         data["encodings"].append(enc)
         data["timestamps"].append(timestamp)
         with open("encodings.pickle", "wb") as f:
@@ -73,6 +74,7 @@ def query_and_add(enc, timestamp):
     try:
         return matches.index(True)
     except ValueError:
+        print("adding with id ", len(data["encodings"]))
         data["encodings"].append(enc)
         data["timestamps"].append(timestamp)
         with open("encodings.pickle", "wb") as f:
@@ -103,7 +105,7 @@ def bulk_add(encodings, timestamps):
 
 def restore():
     if os.path.exists("encodings.pickle"):
-        with open("encodings.pickle", "wb") as f:
+        with open("encodings.pickle", "rb") as f:
             data = pickle.load(f)
 
 
