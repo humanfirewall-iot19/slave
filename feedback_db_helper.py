@@ -43,7 +43,7 @@ class FeedbackDBHelper:
         cursor = self.conn.execute(stmt, args)
         ret = cursor.fetchone()
         if ret is None:
-            return None
+            return 0
         return ret[0]
 
     def get_max_time(self):
@@ -52,7 +52,7 @@ class FeedbackDBHelper:
         cursor = self.conn.execute(stmt, args)
         ret = cursor.fetchone()
         if ret is None:
-            return None
+            return 0
         return ret[0]
 
     def get_diff(self, timestamp):
