@@ -6,6 +6,8 @@ from hashlib import sha256
 from picamera import PiCamera
 
 slave_callback = lambda x: None
+camera = None
+button = None
 
 # get the board serial number
 def get_id():
@@ -23,6 +25,7 @@ def get_id():
     return cpuserial
 
 def ring():
+    global camera
     camera.capture('/home/pi/photo.jpg')
     slave_callback('/home/pi/photo.jpg')
 
@@ -31,6 +34,7 @@ def register_handler(cb):
     slave_callback = cb
 
 def device_setup_and_idle():
+    global camera, button
     #initialize the button
     button = Button(3)
     #initialize the camera
@@ -38,7 +42,7 @@ def device_setup_and_idle():
     camera.resolution = (1920, 1080)
     camera.rotation = 180
     #we get the sha256 hash of the board's serial and enconde it in utf8
-    serial = getserial()
+    serial = get_id()
     #register the callback
     button.when_pressed = ring
 
