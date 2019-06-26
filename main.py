@@ -12,7 +12,7 @@ else:
     import laptop as dev
 
 if os.path.exists(os.path.expanduser("~/master_ip")):
-    MASTER_IP = open(os.path.expanduser("~/master_ip")).read()
+    MASTER_IP = open(os.path.expanduser("~/master_ip")).read().strip()
 else:
     MASTER_IP = "0.0.0.0" # debug
 
@@ -20,6 +20,7 @@ def image_handler(image_path):
     r = None
     req = {}
     try:
+        print ("face query")
         r = faces.query_if_exists_byfile(image_path)
     except faces.FaceNotFound:
         req["has_face"] = False
@@ -34,6 +35,7 @@ def image_handler(image_path):
         req["encoding"] = enc
     req["board_id"] = dev.get_id()
     with open(image_path, 'rb') as f:
+        print ("sending to master")
         files = {"file": f}
         r = requests.post("http://%s:%d/ring" % (MASTER_IP, SRV_PORT),
                           files=files, data=req)

@@ -2,3 +2,4 @@ dlib
 face_recognition
 paho-mqtt
 configparser
+requests
