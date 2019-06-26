@@ -37,7 +37,7 @@ def image_handler(image_path):
         if r is not None:
             enc, face_id = r
             #print(type(enc), repr(enc.shape), repr(enc.dtype), repr(enc))
-            req["encoding"] = base64.b64encode(enc.tobytes())
+            req["encoding"] = str(base64.b64encode(enc.tobytes()), "utf-8")
             if face_id is not None:
                 db = feedback_db_helper.FeedbackDBHelper()
                 db.connect()
@@ -55,7 +55,7 @@ def image_handler(image_path):
         import traceback
         traceback.print_exc()
 
-#qs = queue_subscriber.QueueSubscriber(MASTER_IP)
+qs = queue_subscriber.QueueSubscriber(MASTER_IP)
 
 dev.register_handler(image_handler)
 dev.device_setup_and_idle()
