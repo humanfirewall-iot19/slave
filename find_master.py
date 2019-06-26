@@ -55,20 +55,20 @@ while True:
     r = subprocess.check_output(["nmap", "-p", str(SRV_PORT), get_lan_info()])
     r = str(r, "utf-8")
 
-    rgx = re.compile("""Nmap scan report for .* \(([0-9]+.[0-9]+.[0-9]+.[0-9]+)\)
-    Host is up .*\.
+    rgx = re.compile("""Nmap scan report for .* \(([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\)
+Host is up .*\.
 
-    PORT     STATE SERVICE
-    """ + str(SRV_PORT) + """/tcp open  .*
-    """)
+PORT[ ]+STATE SERVICE
+""" + str(SRV_PORT) + """/tcp open  .*
+""")
 
     print(r)
 
     for ip in rgx.findall(r):
         print("probing %s..." % ip)
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         r = requests.get("http://%s:%d/i_am_the_master" % (ip, SRV_PORT))
-        if r == "OK":
+        print(r,r.text)
+        if r.text == "OK":
             print("master found")
             with open(os.path.expanduser("~/master_ip"), "w") as f:
                 f.write(ip)

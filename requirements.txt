@@ -2,6 +2,4 @@ dlib
 face_recognition
 paho-mqtt
 configparser
-gpiozero
-picamera
-rpi.gpio
+requests
