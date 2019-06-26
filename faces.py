@@ -17,10 +17,14 @@ data = {
 
 def get_encoding(filename):
     img = fr.load_image_file(filename)
+    print(" locating face...")
     boxes = fr.face_locations(img, model="hog")
+    print(" done.")
     if len(boxes) < 1:
         raise FaceNotFound()
+    print(" computing encodings...")
     enc = fr.face_encodings(img, boxes)
+    print(" done.")
     if len(enc) < 1:
         raise FaceNotFound()
     return enc[0]
