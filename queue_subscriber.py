@@ -9,7 +9,7 @@ import time
 class QueueSubscriber:
 
     def __init__(self):
-         parser = configparser.ConfigParser()
+        parser = configparser.ConfigParser()
         parser.read('config.ini')
         self.client = mqtt.Client() 
         url = parser.get('mqtt_broker', 'url')
