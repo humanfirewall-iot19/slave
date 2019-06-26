@@ -9,16 +9,9 @@ import configparser
 
 class QueueSubscriber:
 
-    def __init__(self):
-        parser = configparser.ConfigParser()
-        parser.read('config.ini')
+    def __init__(self, ip):
         self.client = mqtt.Client() 
-        url = parser.get('mqtt_broker', 'url')
-        port = parser.getint('mqtt_broker', 'port')
-        username = parser.get('mqtt_broker', 'username')
-        password = parser.get('mqtt_broker', 'password')
-        self.client.username_pw_set(username, password)
-        self.client.connect(url, port)
+        self.client.connect(ip, 1883)
         self.client.loop_start()
         self.client.on_message = on_message
         print("subscribing ")
