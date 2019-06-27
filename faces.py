@@ -11,6 +11,8 @@ TRESHOLD = 0.6
 class FaceNotFound(RuntimeError):
     pass
 
+filename = "encodings.pickle"
+
 data = {
   "encodings": [],
   "timestamps": [],
@@ -53,7 +55,7 @@ def query_and_add_byfile(filename, timestamp):
         print("adding with id ", len(data["encodings"]))
         data["encodings"].append(enc)
         data["timestamps"].append(timestamp)
-        with open("encodings.pickle", "wb") as f:
+        with open(filename, "wb") as f:
             pickle.dump(data, f)
         return enc, len(data["encodings"])-1
 
@@ -78,7 +80,7 @@ def query_and_add(enc, timestamp):
         print("adding with id ", len(data["encodings"]))
         data["encodings"].append(enc)
         data["timestamps"].append(timestamp)
-        with open("encodings.pickle", "wb") as f:
+        with open(filename, "wb") as f:
             pickle.dump(data, f)
         return len(data["encodings"])-1
 
@@ -112,7 +114,7 @@ def bulk_add(encodings, timestamps):
     for enc, timestamp in zip(encodings, encodings):
         en.append(enc)
         ts.append(timestamp)
-    with open("encodings.pickle", "wb") as f:
+    with open(filename, "wb") as f:
         pickle.dump(data, f)
 
 def bulk_add_b64(encodings, timestamps):
@@ -122,13 +124,14 @@ def bulk_add_b64(encodings, timestamps):
     for enc, timestamp in zip(encodings, encodings):
         en.append(np.ndarray(shape=(128,), dtype="float64", buffer=base64.b64decode(enc)))
         ts.append(timestamp)
-    with open("encodings.pickle", "wb") as f:
+    with open(filename, "wb") as f:
         pickle.dump(data, f)
 
-def restore():
-    global data
-    if os.path.exists("encodings.pickle"):
-        with open("encodings.pickle", "rb") as f:
+def restore(fn="encodings.pickle"):
+    global data, filename
+    filename = fn
+    if os.path.exists(filename):
+        with open(filename, "rb") as f:
             data = pickle.load(f)
 
 def destroy():
