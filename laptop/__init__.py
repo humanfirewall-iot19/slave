@@ -6,7 +6,7 @@ WNAME = "HumanFirewall Test"
 board_id = os.getenv("BOARD_ID")
 if board_id is None: board_id = 1234
 
-print(" [baord_id =", board_id, "]")
+print(" >>> laptop is simulating a board with id =", board_id)
 
 slave_callback = lambda x: None
 
