@@ -92,7 +92,19 @@ def query_by_time(timestamp):
             break
     return en[split_at:], ts[split_at:]
 
+def query_by_time_b64(timestamp):
+    global data
+    ts = data["timestamps"]
+    en = data["encodings"]
+    split_at = len(ts)
+    for i in range(len(ts)-1, -1, -1):
+        if timestamp >= ts[i]:
+            split_at = i+1
+            break
+    return list(map(lambda x: str(base64.b64encode(x.tobytes()), "utf-8"), en[split_at:])), ts[split_at:]
+
 def bulk_add(encodings, timestamps):
+    global data
     assert len(encodings) == len(timestamps)
     ts = data["timestamps"]
     en = data["encodings"]
@@ -102,12 +114,18 @@ def bulk_add(encodings, timestamps):
     with open("encodings.pickle", "wb") as f:
         pickle.dump(data, f)
 
-
 def restore():
+    global data
     if os.path.exists("encodings.pickle"):
         with open("encodings.pickle", "rb") as f:
             data = pickle.load(f)
 
+def destroy():
+    global data
+    data = {
+      "encodings": [],
+      "timestamps": [],
+    }
 
 if __name__ == "__main__":
     restore()
