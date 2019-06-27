@@ -90,8 +90,8 @@ def query_by_time(timestamp):
     en = data["encodings"]
     split_at = len(ts)
     for i in range(len(ts)):
-        if timestamp <= ts[i]:
-            split_at = i+1
+        if timestamp < ts[i]:
+            split_at = i
             break
     return en[split_at:], ts[split_at:]
 
@@ -101,9 +101,11 @@ def query_by_time_b64(timestamp):
     en = data["encodings"]
     split_at = len(ts)
     for i in range(len(ts)):
-        if timestamp <= ts[i]:
-            split_at = i+1
+        print(" ->", timestamp, ts[i])
+        if timestamp < ts[i]:
+            split_at = i
             break
+    print ("split_at", i)
     return list(map(lambda x: str(base64.b64encode(x.tobytes()), "utf-8"), en[split_at:])), ts[split_at:]
 
 def bulk_add(encodings, timestamps):
@@ -111,7 +113,7 @@ def bulk_add(encodings, timestamps):
     assert len(encodings) == len(timestamps)
     ts = data["timestamps"]
     en = data["encodings"]
-    for enc, timestamp in zip(encodings, encodings):
+    for enc, timestamp in zip(encodings, timestamps):
         en.append(enc)
         ts.append(timestamp)
     with open(filename, "wb") as f:
@@ -121,11 +123,17 @@ def bulk_add_b64(encodings, timestamps):
     assert len(encodings) == len(timestamps)
     ts = data["timestamps"]
     en = data["encodings"]
-    for enc, timestamp in zip(encodings, encodings):
+    for enc, timestamp in zip(encodings, timestamps):
         en.append(np.ndarray(shape=(128,), dtype="float64", buffer=base64.b64decode(enc)))
         ts.append(timestamp)
     with open(filename, "wb") as f:
         pickle.dump(data, f)
+
+def get_max_time():
+    global data
+    if len(data["timestamps"]) == 0:
+        return 0
+    return data["timestamps"][-1]
 
 def restore(fn="encodings.pickle"):
     global data, filename
