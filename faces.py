@@ -113,7 +113,7 @@ def bulk_add(encodings, timestamps):
     assert len(encodings) == len(timestamps)
     ts = data["timestamps"]
     en = data["encodings"]
-    for enc, timestamp in zip(encodings, encodings):
+    for enc, timestamp in zip(encodings, timestamps):
         en.append(enc)
         ts.append(timestamp)
     with open(filename, "wb") as f:
@@ -123,11 +123,17 @@ def bulk_add_b64(encodings, timestamps):
     assert len(encodings) == len(timestamps)
     ts = data["timestamps"]
     en = data["encodings"]
-    for enc, timestamp in zip(encodings, encodings):
+    for enc, timestamp in zip(encodings, timestamps):
         en.append(np.ndarray(shape=(128,), dtype="float64", buffer=base64.b64decode(enc)))
         ts.append(timestamp)
     with open(filename, "wb") as f:
         pickle.dump(data, f)
+
+def get_max_time():
+    global data
+    if len(data["timestamps"]) == 0:
+        return 0
+    return data["timestamps"][-1]
 
 def restore(fn="encodings.pickle"):
     global data, filename

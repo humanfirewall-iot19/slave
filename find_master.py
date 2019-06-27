@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# The poor man DNS support under DHCP
 
 TEST = '''
 Starting Nmap 7.60 ( https://nmap.org ) at 2019-06-13 13:26 CEST
@@ -44,13 +43,19 @@ SRV_PORT = 41278
 
 def get_updates(ip):
     faces.restore()
+    mt = faces.get_max_time()
     db = feedback_db_helper.FeedbackDBHelper()
     db.connect()
-    mt = db.get_max_time()
+    mt = max(float(db.get_max_time()), mt)
+    print(mt)
+    
     r = requests.get("http://%s:%d/download_embeddings/%d" % (ip, SRV_PORT, mt))
+    print(r.text)
     embs = json.loads(r.text)
     faces.bulk_add_b64(embs[0], embs[1])
+    
     r = requests.get("http://%s:%d/download_feedbacks/%d" % (ip, SRV_PORT, mt))
+    print(r.text)
     diff = json.loads(r.text)
     db.apply_diff(diff)
     db.close()
@@ -68,6 +73,7 @@ def get_lan_info():
     return lan_range
 
 while True:
+    # The poor man master discovery
     r = subprocess.check_output(["nmap", "-p", str(SRV_PORT), get_lan_info()])
     r = str(r, "utf-8")
 
@@ -78,9 +84,10 @@ PORT[ ]+STATE SERVICE
 """ + str(SRV_PORT) + """/tcp open  .*
 """)
 
-    print(r)
+    #print(r)
 
     for ip in rgx.findall(r):
+    #for ip in ["192.168.43.42"]:
         print("probing %s..." % ip)
         r = requests.get("http://%s:%d/i_am_the_master" % (ip, SRV_PORT))
         print(r,r.text)
