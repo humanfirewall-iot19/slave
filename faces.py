@@ -91,7 +91,7 @@ def query_by_time(timestamp):
     split_at = len(ts)
     for i in range(len(ts)):
         if timestamp <= ts[i]:
-            split_at = i+1
+            split_at = i
             break
     return en[split_at:], ts[split_at:]
 
@@ -101,9 +101,11 @@ def query_by_time_b64(timestamp):
     en = data["encodings"]
     split_at = len(ts)
     for i in range(len(ts)):
+        print(" ->", timestamp, ts[i])
         if timestamp <= ts[i]:
-            split_at = i+1
+            split_at = i
             break
+    print ("split_at", split_at)
     return list(map(lambda x: str(base64.b64encode(x.tobytes()), "utf-8"), en[split_at:])), ts[split_at:]
 
 def bulk_add(encodings, timestamps):
