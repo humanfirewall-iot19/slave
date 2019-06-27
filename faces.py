@@ -89,7 +89,7 @@ def query_by_time(timestamp):
     ts = data["timestamps"]
     en = data["encodings"]
     split_at = len(ts)
-    for i in range(len(ts)-1, -1, -1):
+    for i in range(len(ts)):
         if timestamp <= ts[i]:
             split_at = i+1
             break
@@ -100,7 +100,7 @@ def query_by_time_b64(timestamp):
     ts = data["timestamps"]
     en = data["encodings"]
     split_at = len(ts)
-    for i in range(len(ts)-1, -1, -1):
+    for i in range(len(ts)):
         if timestamp <= ts[i]:
             split_at = i+1
             break
