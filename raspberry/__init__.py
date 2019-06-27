@@ -39,7 +39,8 @@ def device_setup_and_idle():
     button = Button(3)
     #initialize the camera
     camera = PiCamera()
-    camera.resolution = (1920, 1080)
+    #camera.resolution = (1920, 1080)
+    camera.resolution = (1280, 720)
     camera.rotation = 180
     #we get the sha256 hash of the board's serial and enconde it in utf8
     serial = get_id()
