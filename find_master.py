@@ -36,8 +36,24 @@ import subprocess
 import socket
 import requests
 import time
+import feedback_db_helper
+import json
+import faces
 
 SRV_PORT = 41278
+
+def get_updates(ip):
+    faces.restore()
+    db = feedback_db_helper.FeedbackDBHelper()
+    db.connect()
+    mt = db.get_max_time()
+    r = requests.get("http://%s:%d/download_embeddings/%d" % (ip, SRV_PORT, mt))
+    embs = json.loads(r.text)
+    faces.bulk_add_b64(embs[0], embs[1])
+    r = requests.get("http://%s:%d/download_feedbacks/%d" % (ip, SRV_PORT, mt))
+    diff = json.loads(r.text)
+    db.apply_diff(diff)
+    db.close()
 
 def get_lan_info():
     # get lan ip (works only with internet connection)
@@ -72,6 +88,9 @@ PORT[ ]+STATE SERVICE
             print("master found")
             with open(os.path.expanduser("~/master_ip"), "w") as f:
                 f.write(ip)
+            
+            get_updates(ip)
+            
             exit(0)
 
     print("master not found, try again")

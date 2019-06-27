@@ -4,6 +4,7 @@ import face_recognition as fr
 import numpy as np
 import pickle
 import os
+import base64
 
 TRESHOLD = 0.6
 
@@ -110,6 +111,16 @@ def bulk_add(encodings, timestamps):
     en = data["encodings"]
     for enc, timestamp in zip(encodings, encodings):
         en.append(enc)
+        ts.append(timestamp)
+    with open("encodings.pickle", "wb") as f:
+        pickle.dump(data, f)
+
+def bulk_add_b64(encodings, timestamps):
+    assert len(encodings) == len(timestamps)
+    ts = data["timestamps"]
+    en = data["encodings"]
+    for enc, timestamp in zip(encodings, encodings):
+        en.append(np.ndarray(shape=(128,), dtype="float64", buffer=base64.b64decode(enc)))
         ts.append(timestamp)
     with open("encodings.pickle", "wb") as f:
         pickle.dump(data, f)
