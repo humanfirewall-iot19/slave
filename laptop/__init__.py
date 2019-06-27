@@ -2,7 +2,8 @@ import cv2
 
 WNAME = "HumanFirewall Test"
 
-board_id = input("Enter the board id: ")
+board_id = os.getenv("BOARD_ID")
+if board_id is None: board_id = 1234
 
 slave_callback = lambda x: None
 

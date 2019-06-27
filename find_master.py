@@ -49,12 +49,12 @@ def get_updates(ip):
     mt = max(float(db.get_max_time()), mt)
     print(mt)
     
-    r = requests.get("http://%s:%d/download_embeddings/%d" % (ip, SRV_PORT, mt))
+    r = requests.get("http://%s:%d/download_embeddings/%f" % (ip, SRV_PORT, mt))
     print(r.text)
     embs = json.loads(r.text)
     faces.bulk_add_b64(embs[0], embs[1])
     
-    r = requests.get("http://%s:%d/download_feedbacks/%d" % (ip, SRV_PORT, mt))
+    r = requests.get("http://%s:%d/download_feedbacks/%f" % (ip, SRV_PORT, mt))
     print(r.text)
     diff = json.loads(r.text)
     db.apply_diff(diff)
