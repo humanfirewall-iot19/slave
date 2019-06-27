@@ -19,11 +19,11 @@ class FeedbackDBHelper:
 
 
     def _setup_feedback(self):
-        stmt = "CREATE TABLE IF NOT EXISTS userFeedback (id text, target text, unwanted bit, time int)"
+        stmt = "CREATE TABLE IF NOT EXISTS userFeedback (id text, target text, unwanted bit, time float)"
         self.conn.execute(stmt)
         self.conn.commit()
 
-    
+
     def add_feedback(self, chat_id, target, unwanted, time):
         self.delete_feedback(chat_id, target)
         stmt = "INSERT INTO userFeedback (id, target, unwanted, time) VALUES (?,?,?,?)"
@@ -65,7 +65,7 @@ class FeedbackDBHelper:
             self.add_feedback(elem[0],elem[1],elem[2],elem[3])
 
     def __str__(self):
-        stmt = "SELECT * FROM userFeedback " 
+        stmt = "SELECT * FROM userFeedback "
         for x in self.conn.execute(stmt):
             print(x[0],x[1],x[2],x[3])
 
